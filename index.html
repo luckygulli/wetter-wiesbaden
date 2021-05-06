@@ -1,0 +1,76 @@
+<html>
+<head>
+	<!-- Load plotly.js into the DOM -->
+	<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+</head>
+
+<body>
+	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
+</body>
+	<script>
+	
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+	   var jsonData = JSON.parse(xhttp.responseText);
+	   //jsonData.nowcast.items.map(item => item.precrisk.value + "/" + item.radar.amount.value);
+       var trace1 = {
+		  x: jsonData.nowcast.items.map(item => new Date(item.date)),
+		  y: jsonData.nowcast.items.map(item => item.radar.amount.value),
+		  type: 'bar'
+		};
+		
+       /*var trace1 = {
+		  x: ["2021-05-06T16:20:00Z", "2021-05-06T16:20:05Z", "2021-05-06T16:20:10Z", "2021-05-06T16:20:20Z"],
+		  y: [0.10, 0.15, 0.13, 0.17],
+		  type: 'scatter'
+		};*/
+		
+		//xhttp.responseText
+
+		var data = [trace1];
+		var layout = {
+		  xaxis: {
+			tickson: "boundaries",
+			ticklen: 15,
+			gridwidth:1,
+			showdividers: true,
+			dividercolor: 'grey',
+			dividerwidth: 2,
+			//autotick: false,
+    ticks: 'outside',
+    tick0: 0,
+    zeroline: true,
+	zerolinecolor: 'black',
+    zerolinewidth: 10,
+    dtick: 300000,
+    //ticklen: 8,
+    //tickwidth: 4,
+    //tickcolor: '#000'
+		  },
+
+		  yaxis: {
+			//type: 'log',
+			range: [0, 5],
+		  },
+		  bargap :0
+		};
+		console.log("drawn");
+		Plotly.newPlot('myDiv', data, layout);
+    }
+};
+
+function loadData() {
+	xhttp.open("GET", "https://www.wetter.com/wetter_aktuell/hood_weather_update/?lat=50.0786&lng=8.2273&timezone=Europe%2FBerlin", true);
+	//xhttp.responseType = 'json';
+	xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+	xhttp.send();
+}
+//Draw Graph
+loadData();
+
+// Update every minute
+setInterval(loadData, 60*1000);
+
+	</script>
+</html>
