@@ -53,7 +53,13 @@ xhttp.onreadystatechange = function() {
 			//type: 'log',
 			range: [0, 5],
 		  },
-		  bargap :0
+		  bargap :0,
+		  margin: {
+			l:15,
+			t:5,
+			b:30,
+			r:0,
+		  },
 		};
 		console.log("drawn");
 		Plotly.newPlot('myDiv', data, layout);
