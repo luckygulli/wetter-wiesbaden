@@ -10,12 +10,17 @@
 	<script>
 	
 var xhttp = new XMLHttpRequest();
+
+function offset(date) {
+	return new Date(date.getTime() + 2.5*60000);;
+}
+
 xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
 	   var jsonData = JSON.parse(xhttp.responseText);
 	   //jsonData.nowcast.items.map(item => item.precrisk.value + "/" + item.radar.amount.value);
        var trace1 = {
-		  x: jsonData.nowcast.items.map(item => new Date(item.date)),
+		  x: jsonData.nowcast.items.map(item => offset(new Date(item.date))),
 		  y: jsonData.nowcast.items.map(item => item.radar.amount.value),
 		  type: 'bar'
 		};
